@@ -10,6 +10,7 @@ from mesa.datacollection import DataCollector
 
 from agents import Neutrophil, Macrophage, Injury
 from coordinates import *
+from schedule import RandomActivationByAgent
 
 class WoundModel(Model):
     """An ABM wound healing model simulating inflammation and contraction."""
@@ -21,8 +22,8 @@ class WoundModel(Model):
         self.IL6 = IL6
         self.IL10 = IL10
         self.grid = MultiGrid(width, height, True)
-        self.schedule = RandomActivation(self)
-
+        self.schedule = RandomActivationByAgent(self)
+        self.current_id = 0
         #create wound and non-wound region
         self.all_coordinates = all_coordinates(self.grid.width, self.grid.height)
         self.wound_radius = wound_radius
@@ -35,34 +36,37 @@ class WoundModel(Model):
 
         # Create Injury
         for i in range(len(self.wound_coord)):
-            a = Injury(i, self)
-            self.schedule.add(a)
+
             # Add the agent in the wound-region
             coord = self.wound_coord[i]
             x = coord[0]
             y = coord[1]
+            a = Injury(self.next_id(),(x,y), self)
+            self.schedule.add(a)
             self.grid.place_agent(a, (x, y))
 
         # Create Neutrophils
         for i in range(self.neutrophils):
-            a = Neutrophil(i, self)
-            self.schedule.add(a)
+
             # Add the agent in a non-wound region
             coord = int(self.random.randrange(len(self.non_wound_coord)))
             coord = self.non_wound_coord[coord]
             x = coord[0]
             y = coord[1]
+            a = Neutrophil(self.next_id(), (x,y), self)
+            self.schedule.add(a)
             self.grid.place_agent(a, (x, y))
 
         # Create Macrophages
         for i in range(self.macrophages):
-            a = Macrophage(i, self)
-            self.schedule.add(a)
+
             # Add the agent in a non-wound region
             coord = int(self.random.randrange(len(self.non_wound_coord)))
             coord = self.non_wound_coord[coord]
             x = coord[0]
             y = coord[1]
+            a = Macrophage(self.next_id(),(x,y), self)
+            self.schedule.add(a)
             self.grid.place_agent(a, (x, y))
 
         self.running = True

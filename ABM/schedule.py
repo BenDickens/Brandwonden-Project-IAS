@@ -1,5 +1,4 @@
 from collections import defaultdict
-
 from mesa.time import RandomActivation
 
 
@@ -38,7 +37,7 @@ class RandomActivationByAgent(RandomActivation):
         del self._agents[agent.unique_id]
 
         agent_class = type(agent)
-        del self.agents_by_breed[agent_class][agent.uniqrunue_id]
+        del self.agents_by_breed[agent_class][agent.unique_id]
 
     def step(self, by_breed=True):
         '''
