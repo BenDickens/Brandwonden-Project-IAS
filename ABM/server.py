@@ -18,14 +18,21 @@ def agent_portrayal(agent):
     portrayal = {"Shape": "circle",
                  "Filled": "true",
                  "r": 0.5}
-    if type(agent) is Injury:
-        portrayal["Color"] = "red"
-        portrayal["Layer"] = 0
+
+
+    if type(agent) is Endothelial:
+        if agent.oxy == 100:
+            portrayal["Color"] = "tan"
+            portrayal["Layer"] = 1
+        elif agent.oxy == 0:
+            portrayal["Color"] = "red"
+            portrayal["Layer"] = 1
+
 
 
     elif type(agent) is Neutrophil:
         if agent.energy > 0:
-            portrayal["Color"] = "green"
+            portrayal["Color"] = "blue"
             portrayal["Layer"] = 0
         else:
             portrayal = {}

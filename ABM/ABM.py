@@ -8,7 +8,7 @@ from mesa import Agent, Model
 from mesa.time import RandomActivation
 from mesa.datacollection import DataCollector
 
-from agents import Neutrophil, Macrophage, Injury
+from agents import Neutrophil, Macrophage,  Endothelial
 from coordinates import *
 from schedule import RandomActivationByAgent
 
@@ -24,6 +24,7 @@ class WoundModel(Model):
         self.grid = MultiGrid(width, height, True)
         self.schedule = RandomActivationByAgent(self)
         self.current_id = 0
+
         #create wound and non-wound region
         self.all_coordinates = all_coordinates(self.grid.width, self.grid.height)
         self.wound_radius = wound_radius
@@ -34,14 +35,24 @@ class WoundModel(Model):
             if coordinates not in self.wound_coord:
                 self.non_wound_coord += [coordinates]
 
-        # Create Injury
+        # Create non-wound Endothelial cells
+        for i in range(len(self.non_wound_coord)):
+            # Add the agent in the non wound-region
+            coord = self.non_wound_coord[i]
+            x = coord[0]
+            y = coord[1]
+            a = Endothelial(self.next_id(),(x,y),100, self)
+            self.schedule.add(a)
+            self.grid.place_agent(a, (x, y))
+
+        # Create wound Endothelial-cells
         for i in range(len(self.wound_coord)):
 
             # Add the agent in the wound-region
             coord = self.wound_coord[i]
             x = coord[0]
             y = coord[1]
-            a = Injury(self.next_id(),(x,y), self)
+            a = Endothelial(self.next_id(),(x,y),0, self)
             self.schedule.add(a)
             self.grid.place_agent(a, (x, y))
 
@@ -74,7 +85,7 @@ class WoundModel(Model):
 
     def step(self):
         self.schedule.step()
-        print('hi')
+        print('step')
         #self.datacollector.collect(self)
 
     def run_model(self, step_count=200):
