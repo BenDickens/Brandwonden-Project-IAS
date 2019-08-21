@@ -14,7 +14,7 @@ from schedule import RandomActivationByAgent
 
 class WoundModel(Model):
     """An ABM wound healing model simulating inflammation and contraction."""
-    def __init__(self, Neutrophils, Macrophages,IL6, IL10, width, height, wound_radius):
+    def __init__(self, Neutrophils, Macrophages,IL6, IL10, width, height, wound_radius, coagulation):
 
         self.running = True
         self.neutrophils = Neutrophils
@@ -24,12 +24,15 @@ class WoundModel(Model):
         self.grid = MultiGrid(width, height, True)
         self.schedule = RandomActivationByAgent(self)
         self.current_id = 0
+        self.centre = [(width//2, height//2)]
+        self.coagulation_size = wound_radius * coagulation 
 
         #create wound and non-wound region
         self.all_coordinates = all_coordinates(self.grid.width, self.grid.height)
         self.wound_radius = wound_radius
         #self.wound_coord = square_wound_area(self.grid.width, self.grid.height, self.wound_radius) # square shaped wound
         self.wound_coord = circle_wound_area(self.grid.width, self.grid.height, self.wound_radius, self.all_coordinates) #ellipse shaped wound
+        self.coagulation_coord = circle_wound_area(self.grid.width, self.grid.height, self.coagulation_size, self.all_coordinates)
         self.non_wound_coord = []
         for coordinates in self.all_coordinates:
             if coordinates not in self.wound_coord:
@@ -39,22 +42,20 @@ class WoundModel(Model):
         for i in range(len(self.non_wound_coord)):
             # Add the agent in the non wound-region
             coord = self.non_wound_coord[i]
-            x = coord[0]
-            y = coord[1]
-            a = Endothelial(self.next_id(),(x,y),100, self)
+            a = Endothelial(self.next_id(),(coord[0],coord[1]),100, self)
             self.schedule.add(a)
-            self.grid.place_agent(a, (x, y))
+            self.grid.place_agent(a, (coord[0], coord[1]))
 
         # Create wound Endothelial-cells
         for i in range(len(self.wound_coord)):
-
             # Add the agent in the wound-region
             coord = self.wound_coord[i]
-            x = coord[0]
-            y = coord[1]
-            a = Endothelial(self.next_id(),(x,y),0, self)
+            if(coord in self.coagulation_coord):
+                a = Endothelial(self.next_id(),(coord[0],coord[1]),0, self)
+            else:
+            	a = Endothelial(self.next_id(),(coord[0],coord[1]),50, self)
             self.schedule.add(a)
-            self.grid.place_agent(a, (x, y))
+            self.grid.place_agent(a, (coord[0], coord[1]))
 
         # Create Neutrophils
         for i in range(self.neutrophils):
