@@ -6,8 +6,8 @@ The model has four agent types: neutrophils (green), macrophages (M1-Blue, M2-Cy
 orange - intermediate healthy).
 
 Instead of being modelled as agents the cytokine levels are attached to the endothelial
-cells, acting as a state space / environment, that are secreted and attracted (mainly macrophages)
-by cells.  Later, these can be output as heat maps, and used to govern attractant gradients.  
+cells, acting as a state space / environment, that are secreted and attract (mainly macrophages)
+cells.  Later, these can be output as heat maps, and used to govern attractant gradients.  
 
 M1 macrophages are the pro-inflammatory phenotype, whilst M2 are the anti-inflammatory 
 phenotype.  These macrophages secrete and are attracted by different cytokines.  Given the
