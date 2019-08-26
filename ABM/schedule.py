@@ -55,6 +55,7 @@ class RandomActivationByAgent(RandomActivation):
         else:
             super().step()
 
+
     def step_breed(self, breed):
         '''
         Shuffle order and run all agents of a given breed.
