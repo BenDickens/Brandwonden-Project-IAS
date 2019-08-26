@@ -8,8 +8,8 @@ from ABM import WoundModel
 from agents import *
 
 
-Neutrophil_slider = UserSettableParameter('slider', "Number of Neutrophils", 10, 1, 50, 1)
-Macrophage_slider = UserSettableParameter('slider', "Number of Macrophages", 10, 1, 50, 1)
+Neutrophil_slider = UserSettableParameter('slider', "Number of Neutrophils", 24, 1, 50, 1)
+Macrophage_slider = UserSettableParameter('slider', "Number of Macrophages", 19, 1, 50, 1)
 wound_size_slider = UserSettableParameter('slider', 'Wound Radius',13,1,25,1)
 coagulation_slider = UserSettableParameter('slider', 'Proportion of Coagulation', 0.7, 0, 1, 0.1)
 
