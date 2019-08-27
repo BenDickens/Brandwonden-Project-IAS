@@ -22,7 +22,7 @@ class WoundModel(Model):
         self.grid = MultiGrid(width, height, True)
         self.schedule = RandomActivationByAgent(self)
         self.current_id = 0
-        self.centre = [(width//2, height//2)]
+        self.centre = (width//2, height//2)
         self.coagulation_size = wound_radius * coagulation 
 
         #create wound and non-wound region
@@ -63,7 +63,7 @@ class WoundModel(Model):
             coord = self.non_wound_coord[coord]
             x = coord[0]
             y = coord[1]
-            a = Neutrophil(self.next_id(), (x,y), self)
+            a = Neutrophil(self.next_id(), (x,y),self.centre, self)
             self.schedule.add(a)
             self.grid.place_agent(a, (x, y))
 

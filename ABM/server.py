@@ -61,5 +61,5 @@ grid = CanvasGrid(agent_portrayal, 25, 25, 500, 500)
 
 server = ModularServer(WoundModel,
                        [grid],
-                       "Burn Wound healing model",
+                       "Burn Wound Healing Model",
                        {"Neutrophils": Neutrophil_slider, "Macrophages": Macrophage_slider, "width": 25, "height": 25, "wound_radius": wound_size_slider, "coagulation": coagulation_slider})
